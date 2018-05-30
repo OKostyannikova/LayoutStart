@@ -13,20 +13,18 @@ gulp.task("serve", function () {
 
 
 gulp.task("styles", function () {
-    return gulp.src("src/scss/main.scss")
+    return gulp.src(["src/scss/main.scss", "src/scss/libs.scss"])
         .pipe(gp.sourcemaps.init())
-        .pipe(gp.sass({
-            "include css": true
-        }))
+        .pipe(gp.sass().on('error', gp.sass.logError))
         .pipe(gp.autoprefixer({
             browsers: ["last 2 versions"]
         }))
         .on("error", gp.notify.onError({
             title: "style"
         }))
-        .pipe(gp.csso({
+       /*  .pipe(gp.csso({
             restructure: false
-        }))
+        })) */
         .pipe(gp.sourcemaps.write())
         .pipe(gulp.dest("src/css"))
         .pipe(browserSync.reload({
@@ -42,7 +40,7 @@ gulp.task("html", function () {
 
 
 gulp.task("scripts:lib", function () {
-    return gulp.src( ["node_modules/jquery/dist/jquery.min.js", "node_modules/slick-carousel/slick/slick.min.js"])
+    return gulp.src(["node_modules/jquery/dist/jquery.min.js", "node_modules/slick-carousel/slick/slick.min.js"])
         .pipe(gp.concat("libs.min.js"))
         .pipe(gulp.dest("src/js/"))
         .pipe(browserSync.reload({
